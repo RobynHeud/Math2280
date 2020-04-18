@@ -1,9 +1,9 @@
+from math import exp
+
 import Methods
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy import *
-from scipy import integrate
-from scipy.integrate import ode
-import matplotlib.pyplot as plt
 
 # input your slope function as a string
 # i.e. for the DE y'(x)=f(x,y). In this linear DE example
@@ -125,14 +125,24 @@ for step in steps:
     ''' Get the y-terms '''
     euler = Methods.eulers(a, b, y_0, n, dy_dx)[1]
     runge = Methods.runge_kutta(a, b, y_0, n, dy_dx)[1]
+    trapazoid = Methods.trapazoid(a, b, y_0, n)[1]
+    simpson = Methods.simpson(a, b, y_0, exp(a + 2**-step), n)[1]
 
-    euler_errors.append(np.e - euler[n])
-    runge_errors.append(np.e - runge[n])
+    euler_errors.append(np.abs(np.e - euler[n]))
+    runge_errors.append(np.abs(np.e - runge[n]))
+    trapeze_errors.append(np.abs(np.e - trapazoid[n]))
+    simpson_errors.append(np.abs(np.e - simpson[n]))
+
 
 print(euler_errors)
 print(runge_errors)
-ax.scatter(steps, euler_errors, color='red', label='Euler')
-ax.scatter(steps, runge_errors, color='blue', label='Runge-Kutta')
+print(trapeze_errors)
+print(simpson_errors)
+# plt.yscale('log')
+ax.scatter(steps, np.array(euler_errors), color='red', label='Euler')
+ax.scatter(steps, np.array(runge_errors), color='blue', label='Runge-Kutta')
+ax.scatter(steps, np.array(trapeze_errors), color='orange', label='Trapezoidal')
+ax.scatter(steps, np.array(simpson_errors), color='green', label='Simpson’s-Rule')
 ax.legend()
 
 plt.title('Error for Varying Methods')

@@ -4,8 +4,8 @@ from scipy import optimize
 
 def runge_kutta(a, b, y_0, n, f):
     h = (b - a) / n
-    x = np.linspace(a, b, n+1)
-    y = np.zeros(n+1)
+    x = np.linspace(a, b, n + 1)
+    y = np.zeros(n + 1)
 
     y[0] = y_0
 
@@ -21,8 +21,8 @@ def runge_kutta(a, b, y_0, n, f):
 
 def eulers(a, b, y_0, n, f):
     h = (b - a) / n
-    x = np.linspace(a, b, n+1)
-    y = np.zeros(n+1)
+    x = np.linspace(a, b, n + 1)
+    y = np.zeros(n + 1)
 
     y[0] = y_0
 
@@ -31,11 +31,39 @@ def eulers(a, b, y_0, n, f):
 
     return x, y
 
+def simpson(a, b, y_0, y_1, n):
+
+    h = (b - a) / n
+
+    x = np.linspace(a, b, n + 1)
+    y = np.zeros(n + 1)
+
+    y[0] = y_0
+    y[1] = y_1
+
+    for i in range(2, n + 1):
+        y[i] = -(h * y[i - 2] + 4 * h * y[i - 1] + 3 * y[i - 2]) / (h - 3)
+
+    return x, y
+
+
+def trapazoid(a, b, y_0, n):
+    h = (b - a) / n
+
+    x = np.linspace(a, b, n + 1)
+    y = np.zeros(n + 1)
+
+    y[0] = y_0
+
+    for i in range(1, n + 1):
+        y[i] = (2 * y[i - 1] + h * y[i - 1]) / (2 - h)
+
+    return x, y
 
 def improved_eulers(a, b, y_0, n, f):
     h = (b - a) / n
-    x = np.linspace(a, b, n+1)
-    y = np.zeros(n+1)
+    x = np.linspace(a, b, n + 1)
+    y = np.zeros(n + 1, dy)
 
     y[0] = y_0
 
@@ -46,4 +74,3 @@ def improved_eulers(a, b, y_0, n, f):
         y[i] = y[i - 1] + h * (k1 + k2) / 2
 
     return x, y
-
